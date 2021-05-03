@@ -1,5 +1,5 @@
-<!--くずはすくりぷとPHP  HTMLテンプレート メイン-->
-<!-- HTMLヘッダー -->
+<!--KuzuhaScriptPHP HTML template main-->
+<!-- HTML header -->
 <patTemplate:tmpl name="header">
 <!DOCTYPE html>
 <html lang="{META_LANGUAGE}" prefix="og: http://ogp.me/ns#">
@@ -15,25 +15,25 @@
     <meta name="msapplication-TileColor" content="#{C_BACKGROUND}">
     <meta property="og:title" content="{TITLE}">
     <meta property="og:type" content="article">
-    <meta property="og:locale" content="ja_JP">
+    <meta property="og:locale" content="en_US">
     <meta property="og:description" content="{META_DESCRIPTION}">
-    <!-- <meta property="og:url" content="ページのURL"> -->
+    <!-- <meta property="og:url" content="URL of the page"> -->
     <meta property="og:site_name" content="{TITLE}">
     {CUSTOMHEAD}<title>{TITLE}</title>
     <style>
     html { scroll-behavior: smooth; }
-    body { max-height: 100%; -webkit-text-size-adjust: 100%; background: #{C_BACKGROUND}; color: #{C_TEXT}; font-family: "Hiragino Sans W3", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "BIZ UDゴシック", "メイリオ", Meiryo, "ＭＳ ゴシック", "MS Gothic", monospace; font-size: 14px; }
-    /* リンク */
+    body { max-height: 100%; -webkit-text-size-adjust: 100%; background: #{C_BACKGROUND}; color: #{C_TEXT};font-family: "Hiragino Sans W3", "Hiragino Kaku Gothic ProN", "ヒラギノ角ゴ ProN W3", "BIZ UDゴシック", "メイリオ", Meiryo, "ＭＳ ゴシック", "MS Gothic", monospace; font-size: 14px; }
+    /* Links */
     a:link { color: #{C_A_COLOR}; transition:0.2s; }
-    a:visited { color: #{C_A_COLOR}; }
+    a:visited { color: #{C_A_VISITED}; }
     a:active { color: #{C_A_ACTIVE}; }
     a:hover { color: #{C_A_HOVER}; }
     a.help { text-decoration-line: underline; }
-    /* 罫線 */
+    /* Horizontal lines */
     hr { border: 0 none; height: 2px; background-color: #c0c0c0; color: #c0c0c0; }
 
 	fieldset { border: 2px #c0c0c0 solid; border-radius: 2px;}
-    /* モバイル対応 */
+    /* Mobile compatibility */
     @media screen and (min-width: 0px){
         .msgnormal { font-size: 0.9rem; font-size: 14px; line-height:1.3; white-space: pre-wrap; word-wrap: break-word; }
         .msgtree { font-size: 0.9rem; font-size: 14px; line-height:1.3; white-space: pre; }
@@ -48,57 +48,57 @@
     img { max-width: 99%; height: auto; }
     td { white-space: nowrap; }
     fieldset { display: inline-block; margin: 5px 0; padding: 10px; max-width: 100%; }
-    /* 掲示板タイトル */
+    /* Bulletin board title */
     .pagetitle { font-size: large; font-weight: bold; text-align: left; }
-    /* 上部リンク行 */
+    /* Upper link row */
     .link_upper { font-size: 14px; font-size: 0.9rem; }
-    /* 下部リンク行 */
+    /* Lower link row */
     .link_row { font-size: 13px; font-size: 0.8rem; }
-    /* メッセージ */
+    /* Message */
     .bbsmsg { font-size: 16px; font-size: 1.0rem; }
-    /* 書き込み・消去完了メッセージ */
+    /* Write/erase completion message */
     .msg-complete { font-size: xx-large; }
-    /* 小さく */
+    /* Small */
     .small { font-size: small; }
-    /* これ以下の記事はありません */
+    /* There are no posts below this point */
     .msgmore { font-size: 15px; font-size: 0.95rem; font-style: italic; }
-    /* 著作権表示 */
+    /* Copyright notice */
     .copyright { font-size: 13px; font-size: 0.8rem; text-align: right;}
-    /* 題名 */
+    /* Title */
     .ms { color: #{C_SUBJ}; font-size: 17px; font-size: 1.05rem; font-weight: bold; }
-    /* 記事番号 */
+    /* Post number */
     .mnum { font-size: 0.8rem; font-size: 12px; color : #{C_TEXT}; display:none; }
-    /* 投稿者ラベル */
+    /* User label */
     .mu { font-size: 14px; font-size: 0.9rem; }
-    /* 投稿者名 */
+    /* Username */
     .mun { font-size: 14px; font-size: 0.9rem; font-weight: normal;}
-    /* 固定ハンドル */
+    /* Fixed handle */
     .muh { font-size: 15px; font-size: 0.95rem; font-weight: bold; font-style: italic; }
-    /* トリップ */
+    /* Trip */
     .mut { font-size: 15px; font-size: 0.95rem; font-weight: bold; font-style: italic;}
-    /* 投稿日時 */
+    /* Post */
     .md { font-size: 14px; font-size: 0.9rem; }
-    /* 記事ボタン */
+    /* Post buttons */
     .nb,a.help { font-size: 15px; font-size: 0.95rem; white-space: normal; }
-    /* フォーム説明 */
+    /* Post form explanation */
     .pfhelp { font-size: 13px; font-size: 0.8rem; font-style: italic; }
-    /* 引用 */
+    /* Quotes */
     .q { color: #{C_QMSG}; }
-    /* エラー */
+    /* Error */
     .error { font-size: 20px; font-size: 1.2rem; font-weight: bold; color: #{C_ERROR}; }
-    /* 環境変数 */
+    /* Environment variables */
     .env { font-size: 13px; font-size: 0.8rem; font-size: 0.8rem; font-style: italic; }
-    /* ボタン */
+    /* Buttons */
     input[type="button"],input[type="submit"],input[type="reset"] { -webkit-appearance: none; -moz-appearance: none; appearance: none; border: 2px solid #999; border-radius: 2px; background: #bbb; background-color: #d2d2d2; transition:0.2s; padding: .5px .4em; margin-right: .5em; }
     input[type="button"]:hover,input[type="submit"]:hover,input[type="reset"]:hover { background-color: #cdf; border-color: #888; }
     input[type="button"]:active,input[type="submit"]:active,input[type="reset"]:active  { background-color: #abd; border-color: #08c; }
-    /* テキストボックス */
+    /* Text box */
     input[type="text"], input[type="number"], input[type="password"], textarea { max-width: 100%; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; background-color: #eee; border: 2px solid #999; border-radius: 2px; transition: 0.2s; }
     input[type="text"]:hover,input[type="number"]:hover, input[type="password"]:hover,textarea:hover { background-color: #cdf; border-color: #888; }
     input[type="text"]:focus,input[type="number"]:focus, input[type="password"]:focus,textarea:focus { background-color: #ccc; border-color: #08c; }
     input[type="number"] { max-width: 4em; }
-    /* プラグイン */
-    /* カスタム */
+    /* Plugins */
+    /* Custom */
     {CUSTOMSTYLE}
 </style>
 </head>
@@ -106,37 +106,37 @@
 <a id="top"></a>
 </patTemplate:tmpl>
 
-<!-- 横線 -->
+<!-- Horizontal line -->
 <patTemplate:tmpl name="hr">
 <hr>
 </patTemplate:tmpl>
 
-<!-- 著作権表示 -->
+<!-- Copyright notice -->
 <patTemplate:tmpl name="copyright">
 <hr>
 <p class="copyright">
-    <a href="https://github.com/kuz-sysadmin/ksphp-en/" target="_blank">くずはすくりぷとPHP+</a> {VERSION} + vanish.js
+    <a href="https://hiru.coresv.com/ksphp-plus/" target="_blank">KuzuhaScriptPHP+</a> {VERSION} + vanish.js
 </p>
 </patTemplate:tmpl>
 
-<!-- エラーメッセージ -->
+<!-- Error message -->
 <patTemplate:tmpl name="error">
 <p class="error">{ERR_MESSAGE}</p>
 <patTemplate:tmpl name="backnavi" visibility="hidden">
-<span class="bbsmsg"><a href="{DEFURL}" title="元の画面に戻ります">戻る</a></span>
+<span class="bbsmsg"><a href="{DEFURL}" title="Return to previous page">Return</a></span>
 </patTemplate:tmpl>
 </patTemplate:tmpl>
 
-<!-- 記事 -->
+<!-- Posts -->
 <patTemplate:tmpl name="message">
 <span class= "ngline">
     <div class="m" id="m{POSTID}">
     <span class="nw">
         <span class="mnum">{POSTID}.</span>
         <span class="ms">{TITLE}</span>&nbsp;&nbsp;
-        <span class="mu">From：</span>
+        <span class="mu">User:</span>
         <span class="mun">{USER}</span>&nbsp;&nbsp;
-        <span class="md">Date：{WDATE}<a id="a{POSTID}">&nbsp;</a><span class="nb">{BTN}</span>
+        <span class="md">Post date: {WDATE}<a id="a{POSTID}">&nbsp;</a><span class="nb">{BTN}</span>
     </span>
     </span>
     <div class="contents">
@@ -147,23 +147,23 @@
 <hr>
 </patTemplate:tmpl>
 
-<!-- 記事の環境変数表示 -->
+<!-- Display environment variables of posts -->
 <patTemplate:tmpl name="envlist" visibility="hidden">
 <div class="env">{ENVADDR}{ENVBR}{ENVUA}</div>
 </patTemplate:tmpl>
 
-<!-- 掲示板メイン上部（記事のループよりも上の部分） -->
+<!-- Upper area of the main bulletin board (section above the post loop) -->
 <patTemplate:tmpl name="main_upper">
 <header>
 <span class="pagetitle"><a href="{CGIURL}" style="text-decoration: none;">{BBSTITLE}</a></span>　
 <span class="link_upper">
-<a href="{INFOPAGE}" title="広報室へ">Info</a>&nbsp;<a href="mailto:{ADMINMAIL}" title="管理人へメール">Email the admin</a>&nbsp;<a href="{DEFURL}&amp;m=g" target="_blank" title="過去の投稿を閲覧、検索します。">Archive</a>&nbsp;<a href="{CGIURL}?{QUERY}&amp;m=tree" title="スレッドを枝状に表示します">Tree View (Recommended!)</a>&nbsp;|&nbsp;<a href="https://kwatch-24h.net/2sec_alm_multi.html" target="_blank" title="強震モニタです。リンク先は当方とは関係ありません。">Earthquake Watch</a>&nbsp;<a href="https://status.kolyma.org" target="_blank">Status</a>&nbsp;<a href="#bottom" title="下">▼</a>
+<a href="{INFOPAGE}" title="Go to PR office">PR&nbsp;office</a> <a href="mailto:{ADMINMAIL}" title="Email the administrator">Contact</a> <a href="https://hiru.coresv.com/bbs-precautions/" title="Precautions when using the bulletin board">Precautions</a> <a href="{DEFURL}&amp;m=g" target="_blank" title="Browse and search through old posts.">Message&nbsp;logs</a> <a href="{CGIURL}?{QUERY}&amp;m=tree" title="Display threads as branches">Tree&nbsp;view</a> |&nbsp;<a href="https://kwatch-24h.net/2sec_alm_multi.html" target="_blank" title="This is a site that monitors for strong earthquake activity. There's no relation between the link destination and us.">Earthquakes</a> <a href="#bottom" title="Bottom">▼</a>
 </span>
 </header>
 <patTemplate:link src="form" />
 </patTemplate:tmpl>
 
-<!-- 掲示板メイン下部（記事のループよりも下の部分） -->
+<!-- Lower area of the main bulletin board (section below the post loop) -->
 <patTemplate:tmpl name="main_lower">
 </main>
 <p class="msgmore">{MSGMORE}</p>
@@ -178,7 +178,7 @@
                 <input type="hidden" name="c" value="{C}" />
                 <input type="hidden" name="p" value="{TOPPOSTID}" />
                 <input type="hidden" name="b" value="{EINDEX}" />
-                <input type="submit" name="reload" value="Next" class="btn" title="以上は" />
+                <input type="submit" name="reload" value="Next page" class="btn" title="Alt(+Shift)+N" />
             </form>
         </td>
     </patTemplate:tmpl>
@@ -204,7 +204,7 @@
         </form>
     </td>
     <td>
-        <input type="button" onclick="location.href='#top'" accesskey="T" value="▲" class="btn" title="上へ Alt(+Shift)+T">
+        <input type="button" onclick="location.href='#top'" accesskey="T" value="▲" class="btn" title="Top Alt(+Shift)+T">
     </td>
 </patTemplate:tmpl>
 </tr>
@@ -221,13 +221,13 @@
     <input type="hidden" name="loff" value="{LINKOFF}" />
     <input type="hidden" name="sim" value="{SHOWIMG}" />
     <input size="8" type="password" name="u" maxlength="30" value="{U}" />
-    <input type="submit" name="write" value="管理者投稿" class="btn" />
+    <input type="submit" name="write" value="Post as administrator" class="btn" />
 </form>
 </patTemplate:tmpl>
 <patTemplate:link src="copyright" />
 </patTemplate:tmpl>
 
-<!-- 投稿フォーム -->
+<!-- Post form -->
 <patTemplate:tmpl name="form">
 <form method="post" enctype="multipart/form-data" action="{CGIURL}">
     {MODE}
@@ -239,15 +239,15 @@
     <patTemplate:sub condition="default">
     <div class="postform">
         <p>
-            <label for="name1">Name:</label> <input size="20" type="text" name="u" accesskey="1" maxlength="30" value="{U}" placeholder="" title="#ﾄﾘｯﾌﾟ使えます Alt(+Shift)+1" id="name1" /><br>
-            <label for="mail1">Email</label> <input size="30" type="text" name="i" accesskey="2" maxlength="255" value="{I}" placeholder="mail@example.com" title="Alt(+Shift)+2" id="mail1" /><br>
-            <label for="title1">Title:</label> 　<input size="30" type="text" name="t" accesskey="3" maxlength="40" value="{DTITLE}" title="Alt(+Shift)+3" id="title1" />
-            <input type="submit" name="post" accesskey="P" value="Submit Post" class="btn" title="Alt(+Shift)+P, 内容を書かずに投稿ボタンを押すとリロードになります" />
-            <input type="reset" accesskey="K" value="Reset" class="btn" title="Alt(+Shift)+K" />
+            <label for="name1">Name</label> 　<input size="20" type="text" name="u" accesskey="1" maxlength="30" value="{U}" placeholder="" title="You can use a #trip Alt(+Shift)+1" id="name1" /><br>
+            <label for="mail1">Email</label>　<input size="30" type="text" name="i" accesskey="2" maxlength="255" value="{I}" placeholder="mail@example.com" title="Alt(+Shift)+2" id="mail1" /><br>
+            <label for="title1">Title</label>　<input size="30" type="text" name="t" accesskey="3" maxlength="40" value="{DTITLE}" title="Alt(+Shift)+3" id="title1" />
+            <input type="submit" name="post" accesskey="P" value="Post/Reload" class="btn" title="Alt(+Shift)+P, if you click the post button without writing any contents, the page will reload instead" />
+            <input type="reset" accesskey="K" value="Clear" class="btn" title="Alt(+Shift)+K" />
         </p><p>
-            <label for="contents1">Contents of post</label>
+            <label for="contents1">Contents</label>
             <span class="pfhelp">
-                 New message （500 characters per line, up to 120 lines. Please put a line break appropriately.  No special markup enabled.）
+                (Up to {MAXMSGCOL} columns and {MAXMSGLINE} lines. Please insert line breaks where appropriate. HTML/BBCode tags cannot be used.)
             </span>
             <br>
             <textarea rows="5" cols="70" name="v" accesskey="4" maxlength="10000" placeholder="" title="Alt(+Shift)+4" id="contents1">{DMSG}</textarea>
@@ -261,16 +261,16 @@
 <patTemplate:sub condition="image">
 <div class="postform">
     <p>
-        <label for="name2">Poster:</label> <input size="20" type="text" name="u" accesskey="1" maxlength="30" value="{U}" placeholder="" title="#ﾄﾘｯﾌﾟ使えます Alt(+Shift)+1" id="name2" /><br>
-        <label for="mail2">Email:</label> <input size="30" type="text" name="i" accesskey="2" maxlength="255" value="{I}" placeholder="mail@example.com" title="Alt(+Shift)+2" id="mail2" /><br>
-        <label for="title2">Title:</label> 　<input size="30" type="text" name="t" accesskey="3" maxlength="40" value="{DTITLE}" title="Alt(+Shift)+3" id="title2" />
-        <input type="submit" name="post" accesskey="P" value="Submit" class="btn" title="Alt(+Shift)+P, Press this to post" />
-        <input type="reset" accesskey="K" value="消す" class="btn" title="Alt(+Shift)+K" />
+        <label for="name2">Name</label> 　<input size="20" type="text" name="u" accesskey="1" maxlength="30" value="{U}" placeholder="" title="You can use a #trip Alt(+Shift)+1" id="name2" /><br>
+        <label for="mail2">Email</label>　<input size="30" type="text" name="i" accesskey="2" maxlength="255" value="{I}" placeholder="mail@example.com" title="Alt(+Shift)+2" id="mail2" /><br>
+        <label for="title2">Title</label>　<input size="30" type="text" name="t" accesskey="3" maxlength="40" value="{DTITLE}" title="Alt(+Shift)+3" id="title2" />
+        <input type="submit" name="post" accesskey="P" value="Post/Reload" class="btn" title="Alt(+Shift)+P, if you click the post button without writing any contents, the page will reload instead" />
+        <input type="reset" accesskey="K" value="Clear" class="btn" title="Alt(+Shift)+K" />
     </p><p>
-        <label for="contents2">内容</label>
+        <label for="contents2">Contents</label>
         <span class="pfhelp">
-            （{MAXMSGCOL}桁{MAXMSGLINE}行まで。適当に改行を入れてください。タグは使えません。<br>
-            本文中に {IMAGETEXT} と書くとアップロード画像はその部分に挿入されます。）
+            (Up to {MAXMSGCOL} columns and {MAXMSGLINE} lines. Please insert line breaks where appropriate. HTML/BBCode tags cannot be used. <br>
+            If you write {IMAGETEXT} in your text, the uploaded image will be inserted into that position.)
         </span>
         <br>
         <textarea rows="5" cols="70" name="v" accesskey="4" maxlength="10000" placeholder="" title="Alt(+Shift)+4" id="contents2">{DMSG}</textarea>
@@ -279,15 +279,14 @@
         <br>
         <input size="70" type="text" name="l" accesskey="5" maxlength="255" value="{DLINK}" placeholder="http://" title="Alt(+Shift)+5" id="url2" />
     </p><p>
-        画像アップロード
+        Image upload
         <span class="pfhelp">
-            （jpg/gif/pngのみ。横幅{MAX_IMAGEWIDTH}pixel、縦幅{MAX_IMAGEHEIGHT}pixel、サイズ{MAX_IMAGESIZE}KBまで。）
+            （JPG/GIF/PNG only. Max width {MAX_IMAGEWIDTH}px; max height {MAX_IMAGEHEIGHT}px; max file size {MAX_IMAGESIZE}KB.）
         </span>
         <br>
         <input type="hidden" name="MAX_FILE_SIZE" value="{MAX_FILE_SIZE}">
         <input size="40" type="file" name="file" accesskey="7" maxlength="255" value="" title="Alt(+Shift)+7" />
     </p>
-<img src="/matari.gif">
 </div>
 </patTemplate:sub>
 <patTemplate:sub condition="hide">
@@ -297,34 +296,34 @@
 </patTemplate:tmpl>
 <patTemplate:tmpl name="extraform">
 <div class="small">
-    <label for="num1">Posts to display</label><input type="number" size="2" name="d" accesskey="6" value="{MSGDISP}" title="Alt(+Shift)+6" id="num1" />&nbsp;
+    <label for="num1">Posts&nbsp;displayed</label>&nbsp;<input type="number" size="2" name="d" accesskey="6" value="{MSGDISP}" title="Alt(+Shift)+6" id="num1" />&nbsp;
     <patTemplate:tmpl name="formconfig">
-    <label for="a1">URL Automatic</label><input type="checkbox" name="a" accesskey="U" value="checked"{CHK_A} title="Alt(+Shift)+U" id="a1" />&nbsp;
-    <!--<label for="indention1">自動改行</label><input type="checkbox" name="wrap" accesskey="A" value="checked"{CHK_WRAP} title="Alt(+Shift)+A" id="indention1" />&nbsp; -->
-    <label for="hide1">Log Reading Mode</label><input type="checkbox" name="hide" accesskey="I" value="checked"{CHK_HIDE} title="Alt(+Shift)+I" id="hide1" />&nbsp;
+    <label for="a1">Auto-link&nbsp;URLs</label><input type="checkbox" name="a" accesskey="U" value="checked"{CHK_A} title="Alt(+Shift)+U" id="a1" />&nbsp;
+    <!--<label for="indention1">Auto line breaks</label><input type="checkbox" name="wrap" accesskey="A" value="checked"{CHK_WRAP} title="Alt(+Shift)+A" id="indention1" />&nbsp; -->
+    <label for="hide1">Log-reading&nbsp;mode</label><input type="checkbox" name="hide" accesskey="I" value="checked"{CHK_HIDE} title="Alt(+Shift)+I" id="hide1" />&nbsp;
 </patTemplate:tmpl>
-<label for="loff1">Link-Line OFF</label><input type="checkbox" name="loff" accesskey="L" value="checked"{CHK_LOFF} title="Alt(+Shift)+L" id="loff1" />&nbsp;
+<label for="loff1">Hide&nbsp;link&nbsp;line</label><input type="checkbox" name="loff" accesskey="L" value="checked"{CHK_LOFF} title="Alt(+Shift)+L" id="loff1" />&nbsp;
 <patTemplate:tmpl name="sicheck" visibility="hidden">
-<label for="sim1">画像ON</label><input type="checkbox" name="sim" accesskey="S" value="checked"{CHK_SI} title="Alt(+Shift)+S" id="sim1" />&nbsp;
+<label for="sim1">Show&nbsp;images</label><input type="checkbox" name="sim" accesskey="S" value="checked"{CHK_SI} title="Alt(+Shift)+S" id="sim1" />&nbsp;
 </patTemplate:tmpl>
-<input type="submit" name="setup" accesskey="C" value="Settings" class="btn" title="Alt(+Shift)+C, 設定画面に入ります" />
+<input type="submit" name="setup" accesskey="C" value="User settings" class="btn" title="Alt(+Shift)+C, Enter the settings page" />
 </div>
 <patTemplate:tmpl name="counterrow">
     <br>
     <div>
         <patTemplate:tmpl name="counter">
-            {COUNTDATE}&nbsp;Views&nbsp;{COUNTER}&nbsp;(Accuracy level : {COUNTLEVEL})　
+            Page&nbsp;views&nbsp;since&nbsp;{COUNTDATE}:&nbsp;{COUNTER} (bulletproof&nbsp;level:&nbsp;{COUNTLEVEL})　
         </patTemplate:tmpl>
         <patTemplate:tmpl name="mbrcount">
-           | Currently Online&nbsp;:&nbsp;{MBRCOUNT}  |
+            Current&nbsp;participants:&nbsp;{MBRCOUNT}&nbsp;users (within&nbsp;{CNTLIMIT}&nbsp;seconds)　
         </patTemplate:tmpl>
-        Max Posts&nbsp;:&nbsp;{LOGSAVE}
+        Max&nbsp;posts&nbsp;saved:&nbsp;{LOGSAVE}&nbsp;posts
     </div>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="linkrow">
 <hr>
 <div class="link_row">
-    <a href="{INFOPAGE}" title="Info">Information</a>&nbsp;|&nbsp;<a href="{DEFURL}&amp;m=g" target="_blank" title="過去の投稿を閲覧、検索します。">Archive</a>
+    <a href="{INFOPAGE}" title="To the PR office">PR office</a>&nbsp;|&nbsp;<a href="{DEFURL}&amp;m=g" target="_blank" title="Browse and search through old posts.">Message logs</a>
     {BBSLINK}
 </div>
 </patTemplate:tmpl>
@@ -332,9 +331,9 @@
 <patTemplate:tmpl name="helprow">
 <hr>
 <div class="small">
-<span title="書き込みに返信します"><a class="help">{TXTFOLLOW}</a>&nbsp;:&nbsp;Reply to the post</span>　<span title="同じ投稿者の投稿を一覧表示します"><a class="help">{TXTAUTHOR}</a>&nbsp;:&nbsp;Author Search</span>　<span title="スレッドにまとめて表示します"><a class="help">{TXTTHREAD}</a>&nbsp;:&nbsp;Thread</span>　<span title="そのスレッドをツリー表示します"><a class="help">{TXTTREE}</a>&nbsp;:&nbsp;TREE</span>　
+<span title="Post a reply"><a class="help">{TXTFOLLOW}</a>:&nbsp;Follow-up&nbsp;post&nbsp;(reply)</span>　<span title="List all posts made by the same user"><a class="help">{TXTAUTHOR}</a>:&nbsp;Search&nbsp;by&nbsp;user</span>　<span title="Display the reply chain as a thread"><a class="help">{TXTTHREAD}</a>:&nbsp;Thread</span>　<span title="Display the thread as a tree"><a class="help">{TXTTREE}</a>:&nbsp;Tree</span>　
 <patTemplate:tmpl name="helpundo">
-<span title="自分の直前の投稿を削除します"><a class="help">{TXTUNDO}</a>&nbsp;:&nbsp;Delete post (undo)</span>
+<span title="Delete the last post you made"><a class="help">{TXTUNDO}</a>:&nbsp;Delete&nbsp;previous&nbsp;post</span>
 </patTemplate:tmpl>
 </div>
 <hr>
@@ -344,21 +343,22 @@
 <div class="small">
     <patTemplate:tmpl name="postbtn" type="Condition" conditionvar="HIDEFORM">
     <patTemplate:sub condition="default">
-    <input type="submit" name="post" accesskey="R" value="Reset" class="btn" title="Alt(+Shift)+R, 内容を書かずに投稿ボタンを押すとリロードになります" />
+    <input type="submit" name="post" accesskey="R" value="Post/Reload" class="btn" title="Alt(+Shift)+R, if you click the post button without writing any contents, the page will reload instead" />
 </patTemplate:sub>
 <patTemplate:sub condition="1">
-<input type="submit" name="post" accesskey="R" value="リロード" class="btn" title="Alt(+Shift)+R" />
+<input type="submit" name="post" accesskey="R" value="Reload" class="btn" title="Alt(+Shift)+R" />
 </patTemplate:sub>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="readnewbtn">
-<input type="submit" name="readnew" accesskey="M" value="Submit Post" class="btn" title="Alt(+Shift)+M" />
-<!--<input type="submit" name="readzero" accesskey="0" value="0件" class="btn" title="Alt(+Shift)+0" />-->
+<input type="submit" name="readnew" accesskey="M" value="Unread" class="btn" title="Alt(+Shift)+M" />
+<!--<input type="submit" name="readzero" accesskey="0" value="0 posts" class="btn" title="Alt(+Shift)+0" />-->
 </patTemplate:tmpl>
 <patTemplate:tmpl name="newpostbtn">
-<input type="submit" name="write" accesskey="W" value=" 新規投稿 " class="btn" title="Alt(+Shift)+W" />
+<input type="submit" name="write" accesskey="W" value=" New posts " class="btn" title="Alt(+Shift)+W" />
 </patTemplate:tmpl>
-<input type="button" onclick="location.href='#bottom'" accesskey="B" value="▼" class="btn" title="下 Alt(+Shift)+B">
+<input type="button" onclick="location.href='#bottom'" accesskey="B" value="▼" class="btn" title="Bottom Alt(+Shift)+B">
 <a class="mu" href="./bbs.php?c={C}&amp;d=30&amp;p={TOPPOSTID}&amp;d=30" accesskey="J">Latest 30 posts</a>&nbsp;
+<span class="ngset"></span>
 </div>
 </patTemplate:tmpl>
 </form>
@@ -367,14 +367,14 @@
 </patTemplate:tmpl>
 </patTemplate:tmpl>
 
-<!-- フォロー画面(返信画面) -->
+<!-- Follow-up page (reply page) -->
 <patTemplate:tmpl name="follow">
 <hr>
 <patTemplate:link src="message" />
-<table><tr><td><span class="bbsmsg">フォロー記事投稿(返信)　<a href="{DEFURL}" title="元の画面へ戻ります">←戻る</a></span></td></tr></table>
+<table><tr><td><span class="bbsmsg">Follow-up post (reply)　<a href="{DEFURL}" title="Return to the previous page">←Return</a></span></td></tr></table>
 <patTemplate:link src="form" />
 <div class="small">
-    <label for="a2">URL自動リンク</label> <input type="checkbox" name="a" value="checked"{CHK_A} id="a2" />
+    <label for="a2">Auto-link URLs</label> <input type="checkbox" name="a" value="checked"{CHK_A} id="a2" />
 </div>
 <input type="hidden" name="f" value="{FOLLOWID}" />
 <input type="hidden" name="ff" value="{FF}" />
@@ -387,12 +387,12 @@
 </form>
 </patTemplate:tmpl>
 
-<!-- 新規投稿画面 -->
+<!-- New post page -->
 <patTemplate:tmpl name="newpost">
-<table><tr><td><span class="pagetitle"><a href="{DEFURL}" style="text-decoration: none;">{BBSTITLE}</a></span> - 新規投稿　<a href="{DEFURL}" title="元の画面に戻ります">←戻る</a></td></tr></table>
+<table><tr><td><span class="pagetitle"><a href="{DEFURL}" style="text-decoration: none;">{BBSTITLE}</a></span> - New post　<a href="{DEFURL}" title="Return to the previous page">←Return</a></td></tr></table>
 <patTemplate:link src="form" />
 <div class="small">
-    <label for="a3">URL自動リンク</label> <input type="checkbox" name="a" value="checked"{CHK_A} id="a3" />
+    <label for="a3">Auto-link URLs</label> <input type="checkbox" name="a" value="checked"{CHK_A} id="a3" />
 </div>
 <input type="hidden" name="g" value="{GZIPU}" />
 <input type="hidden" name="d" value="{MSGDISP}" />
@@ -404,51 +404,52 @@
 </form>
 </patTemplate:tmpl>
 
-<!-- 投稿検索画面 -->
+<!-- Post search page -->
 <patTemplate:tmpl name="searchlist_upper">
 <hr>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="searchlist_lower">
-<span class="bbsmsg">{SUCCESS}we found a lot of things to do with it.。　<a href="{DEFURL}" title="元の画面に戻ります">←戻る</a></span>
+<span class="bbsmsg">{SUCCESS} posts found.　<a href="{DEFURL}" title="Return to the previous page">←Return</a></span>
 </patTemplate:tmpl>
 
-<!-- 書き込み完了 -->
+<!-- Post complete -->
 <patTemplate:tmpl name="postcomplete">
-<span class="pagetitle"><a href="{DEFURL}" accesskey="o" title="掲示板に戻ります Alt(+Shift)+O" ><div class="msg-complete">Post complete.</div></a></span><p>
+<span class="pagetitle"><a href="{DEFURL}" accesskey="o" title="Return to the bulletin board Alt(+Shift)+O" ><div class="msg-complete">Post complete</div></a></span><p>
+    <i>Click the link above or press <kbd>Alt</kbd>(+<kbd>Shift</kbd>)+<b><kbd>O</kbd></b> to return to the bulletin board.</i><p>
     </patTemplate:tmpl>
 
-    <!-- UNDO処理完了 -->
+    <!-- Undo process complete -->
     <patTemplate:tmpl name="undocomplete">
-    <span class="pagetitle"><a href="{DEFURL}" accesskey="o" title="掲示板に戻ります Alt(+Shift)+O" ><div class="msg-complete">消去完了</div></a></span><p>
-        <i>リンクをクリックするか、<kbd>Alt</kbd>(+<kbd>Shift</kbd>)+<b><kbd>O</kbd></b>で掲示板に戻ります。</i><p>
+    <span class="pagetitle"><a href="{DEFURL}" accesskey="o" title="Return to the bulletin board Alt(+Shift)+O" ><div class="msg-complete">Deletion complete</div></a></span><p>
+        <i>Click the link above or press <kbd>Alt</kbd>(+<kbd>Shift</kbd>)+<b><kbd>O</kbd></b> to return to the bulletin board.</i><p>
         </patTemplate:tmpl>
 
-        <!-- 環境設定画面 -->
+        <!-- Settings page -->
         <patTemplate:tmpl name="custom">
         <header><span class="pagetitle"><a href="{DEFURL}" style="text-decoration: none;">{BBSTITLE}</a></span></header>
-        <h1>Settings Menu</h1>
+        <h1>User settings</h1>
         <form method="post" action="{CGIURL}">
             <input type="hidden" name="m" value="c" />
             <input type="hidden" name="nm" value="{MODE}" />
                     <fieldset>
-                    <legend>表示色 (16進数)</legend>
-                        <label for="c1">Text Color</label> # <input type="text" name="C_TEXT" size="7" maxlength="6" value="{C_TEXT}" id="c1" /><br>
-                        <label for="c2">BG Color</label> # <input type="text" name="C_BACKGROUND" size="7" maxlength="6" value="{C_BACKGROUND}" id="c2" /><br>
-                        <label for="c3">Link Color</label> # <input type="text" name="C_A_COLOR" size="7" maxlength="6" value="{C_A_COLOR}" id="c3" /><br>
-                        <label for="c4">Link Color (Visited)</label> # <input type="text" name="C_A_VISITED" size="7" maxlength="6" value="{C_A_VISITED}" id="c4" /><br>
-                        <label for="c5">Link Color (Active)</label> # <input type="text" name="C_A_ACTIVE" size="7" maxlength="6" value="{C_A_ACTIVE}" id="c5" /><br>
-                        <label for="c6">Link Color (hover)</label> # <input type="text" name="C_A_HOVER" size="7" maxlength="6" value="{C_A_HOVER}" id="c6" /><br>
-                        <label for="c7">Title Color</label> # <input type="text" name="C_SUBJ" size="7" maxlength="6" value="{C_SUBJ}" id="c7" /><br>
-                        <label for="c8">Quote Color</label> # <input type="text" name="C_QMSG" size="7" maxlength="6" value="{C_QMSG}" id="c8" />
+                    <legend>Display colors (hexadecimal)</legend>
+                        <label for="c1">Text color</label> # <input type="text" name="C_TEXT" size="7" maxlength="6" value="{C_TEXT}" id="c1" /><br>
+                        <label for="c2">Background color</label> # <input type="text" name="C_BACKGROUND" size="7" maxlength="6" value="{C_BACKGROUND}" id="c2" /><br>
+                        <label for="c3">Link color</label> # <input type="text" name="C_A_COLOR" size="7" maxlength="6" value="{C_A_COLOR}" id="c3" /><br>
+                        <label for="c4">Visited link color</label> # <input type="text" name="C_A_VISITED" size="7" maxlength="6" value="{C_A_VISITED}" id="c4" /><br>
+                        <label for="c5">Active link color</label> # <input type="text" name="C_A_ACTIVE" size="7" maxlength="6" value="{C_A_ACTIVE}" id="c5" /><br>
+                        <label for="c6">Mouseover link color</label> # <input type="text" name="C_A_HOVER" size="7" maxlength="6" value="{C_A_HOVER}" id="c6" /><br>
+                        <label for="c7">Title color</label> # <input type="text" name="C_SUBJ" size="7" maxlength="6" value="{C_SUBJ}" id="c7" /><br>
+                        <label for="c8">Quote color</label> # <input type="text" name="C_QMSG" size="7" maxlength="6" value="{C_QMSG}" id="c8" />
                     </fieldset>
                     <br>
                     <fieldset>
-                    <legend>Other Function</legend>
-                    <label for="num2">Number of displayed posts</label> <input type="number" size="2" name="d" value="{MSGDISP}" id="num2" /><br><br>
-                    <input type="checkbox" name="g" value="checked"{CHK_G} id="g1" /> <label for="g1">gzip compressed transfer (makes display faster）</label><br>
+                    <legend>Additional features</legend>
+                    <label for="num2">Posts displayed</label> <input type="number" size="2" name="d" value="{MSGDISP}" id="num2" /><br><br>
+                    <input type="checkbox" name="g" value="checked"{CHK_G} id="g1" /> <label for="g1">Transfer using gzip compression (display will be faster)</label><br>
                     <patTemplate:tmpl name="custom_hide" type="condition" conditionvar="BBSMODE_ADMINONLY">
                     <patTemplate:sub condition="0">
-                    <input type="checkbox" name="hide" value="checked"{CHK_HIDE} id="hide2" /> <label for="hide2">Log reading mode (do not display the post form）</label><br>
+                    <input type="checkbox" name="hide" value="checked"{CHK_HIDE} id="hide2" /> <label for="hide2">Log-reading mode (will not display the post form)</label><br>
                 </patTemplate:sub>
                 <patTemplate:sub condition="default">
                 <input type="hidden" name="hide" value="checked" />
@@ -459,43 +460,43 @@
         <input type="hidden" name="a" value="checked" />
     </patTemplate:sub>
     <patTemplate:sub condition="default">
-    <input type="checkbox" name="a" value="checked"{CHK_A} id="a4" /> <label for="a4">URL Auto link (Automatically link URLs in content when posting)）</label><br>
+    <input type="checkbox" name="a" value="checked"{CHK_A} id="a4" /> <label for="a4">Auto-link URLs (URLs inside post contents will automatically become links when posted)</label><br>
 </patTemplate:sub>
 </patTemplate:tmpl>
-<input type="checkbox" name="cookie" value="checked"{CHK_COOKIE} id="cookie1" /> <label for="cookie1">Keep email and name in cookie after posting</label><br>
-<input type="checkbox" name="loff" value="checked"{CHK_LOFF} id="loff2" /> <label for="loff2">Link line OFF (Do not display link list line under post form）</label><br>
-<!-- <input type="checkbox" name="sim" value="checked"{CHK_SI} id="sim2" /> <label for="sim2">画像ON （画像BBSモードで投稿された画像を表示する）</label><br> -->
+<input type="checkbox" name="cookie" value="checked"{CHK_COOKIE} id="cookie1" /> <label for="cookie1">Save your name and email address in a cookie when posting</label><br>
+<input type="checkbox" name="loff" value="checked"{CHK_LOFF} id="loff2" /> <label for="loff2">Hide link row (will not display the list of links below the post form)</label><br>
+<!-- <input type="checkbox" name="sim" value="checked"{CHK_SI} id="sim2" /> <label for="sim2">Show images (will display images posted in imageBBS mode)</label><br> -->
 </fieldset>
 <br>
 <fieldset>
-        <legend>How to display the Reply Form</legend>
+        <legend>How to display the follow-up post page</legend>
         <input type="radio" name="fw" value="0"{CHK_FW_0} id="fw1-1" /><label for="fw1-1">Open and display a new window</label><br>
-        <input type="radio" name="fw" value="1"{CHK_FW_1} id="fw1-2" /><label for="fw1-2">Display in same window</label><br>
+        <input type="radio" name="fw" value="1"{CHK_FW_1} id="fw1-2" /><label for="fw1-2">Display on the same page</label><br>
 </fieldset>
 <!-- <br>
 <fieldset>
-<legend>０件リロード時のメッセージの表示方法</legend>
-<input type="radio" name="rt" value="0"{CHK_RT_0} id="rt1-1" /><label for="rt1-1">投稿時刻降順表示(既定)</label><br>
-<input type="radio" name="rt" value="1"{CHK_RT_1} id="rt1-2" /><label for="rt1-2">投稿時刻昇順表示</label><br>
+<legend>How to display messages when using 0 post reload</legend>
+<input type="radio" name="rt" value="0"{CHK_RT_0} id="rt1-1" /><label for="rt1-1">Display posts in descending time order (default)</label><br>
+<input type="radio" name="rt" value="1"{CHK_RT_1} id="rt1-2" /><label for="rt1-2">Display posts in ascending time order</label><br>
 </fieldset> -->
-<p>If you register the URL displayed after pressing"Register" to a bookmark, you can view the bulletin board with the above settings.</p>
-<div><input type="submit" value="  SAVE  " class="btn" title="設定を保存して掲示板に戻ります。" /><input type="reset" value="Undo" class="btn" title="設定をリセットします" /><input type="submit" name="cr" value="Return to default settings" class="btn" title="すべての変更を削除して掲示板に戻ります。" />  <a href="{DEFURL}" title="元の画面に戻ります">Go Back</a></div>
+<p>If you bookmark the URL that appears after you click "Register", you will be able to browse the bulletin board with the above settings.</p>
+<div><input type="submit" value="Register" class="btn" title="Save your settings and return to the bulletin board." /><input type="reset" value="Undo changes" class="btn" title="Reset your settings" /><input type="submit" name="cr" value="Restore defaults" class="btn" title="Delete all changes and return to the bulletin board." />  <a href="{DEFURL}" title="Return to the previous page">Return</a></div>
 </form>
 </patTemplate:tmpl>
 
-<!-- METAタグによるリダイレクト -->
+<!-- Redirect via META tag -->
 <patTemplate:tmpl name="redirect">
 <p>
-    <span class="bbsmsg">Redirecting...</span><br><br>
+    <span class="bbsmsg">Redirecting…</span><br><br>
     <span class="bbsmsg">To:&nbsp;{REDIRECTURL}</span>
 </p>
 </patTemplate:tmpl>
 
-<!-- HTMLフッター -->
+<!-- HTML footer -->
 <patTemplate:tmpl name="footer">
 <footer>
 <patTemplate:tmpl name="duration" visibility="hidden">
-<p><span class="msgmore">Generated in {DURATION} seconds</span>　<a href="#top" title="上">▲</a></p>
+<p><span class="msgmore">Page generation time: {DURATION} seconds</span>　<a href="#top" title="Top">▲</a></p>
 </patTemplate:tmpl>
 </footer>
 <script type="text/javascript" src="vanish.js"></script>

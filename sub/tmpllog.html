@@ -1,17 +1,17 @@
-<!-- くずはすくりぷとPHP  HTMLテンプレート  過去ログ用 -->
-<!-- 過去ログ画面 -->
+<!-- KuzuhaScriptPHP HTML template for message logs -->
+<!-- Message logs page -->
 <patTemplate:tmpl name="loglist">
 <a id="top"></a>
-<header><span class="pagetitle"><a href="{CGIURL}" style="text-decoration: none;">{BBSTITLE}</a></span> <a href="{DEFURL}">戻る</a> <a href="#bottom">▼</a></header>
-<h1>Old Log Warehouse</h1>
+<header><span class="pagetitle"><a href="{CGIURL}" style="text-decoration: none;">{BBSTITLE}</a></span> <a href="{DEFURL}">Return</a> <a href="#bottom">▼</a></header>
+<h1>Message logs</h1>
 <form name="form" method="get" action="{CGIURL}">
 	<input type="hidden" name="m" value="g" />
 	<input type="hidden" name="c" value="{C}" />
 	<input type="hidden" name="d" value="{MSGDISP}" />
 	<patTemplate:tmpl name="ziplink" visibility="hidden">
-	<p class="medium"><a href="{DEFURL}&amp;m=g&amp;gm=z">Past Log ZIP Archive</a></p>
+	<p class="medium"><a href="{DEFURL}&amp;m=g&amp;gm=z">ZIP archives of message logs</a></p>
 </patTemplate:tmpl>
-<h2>Old Log Warehouse</h2>
+<h2>List of message logs</h2>
 <table border="0" cellpadding="3">
 	<patTemplate:tmpl name="filelist">
 	<tr>
@@ -20,26 +20,26 @@
 		<td align="right"><span class="medium"><i>{FTIME}</i></span></td>
 		<td align="right"><span class="medium"><i>{FSIZE} bytes</i></span></td>
 		<patTemplate:tmpl name="topiclink">
-		<td align="right"><span class="medium"><a href="{DEFURL}&amp;m=g&amp;l={FILENAME}">List of topics</a></span></td>
+		<td align="right"><span class="medium"><a href="{DEFURL}&amp;m=g&amp;l={FILENAME}">Topic list</a></span></td>
 	</patTemplate:tmpl>
 	<patTemplate:tmpl name="dllink">
-	<td align="right"><span class="medium"><a href="{DEFURL}&amp;m=g&amp;dl={FILENAME}">Download driver.</a></span></td>
+	<td align="right"><span class="medium"><a href="{DEFURL}&amp;m=g&amp;dl={FILENAME}">↓Download</a></span></td>
 </patTemplate:tmpl>
 </tr>
 </patTemplate:tmpl>
 </table>
-<table><tr><td><input type="checkbox" name="checkall" onClick="AllChecked();" id="checkall1" /> <label for="checkall1">Select / Deselect All</label></td></tr></table>
-<noscript><strong>JavaScript is necessary.</strong>Please enable JavaScript to use All Select / Deselect.</noscript>
+<table><tr><td><input type="checkbox" name="checkall" onClick="AllChecked();" id="checkall1" /> <label for="checkall1">Select/deselect all</label></td></tr></table>
+<noscript><strong>JavaScript is not available.</strong> Please enable JavaScript to use select/deselect all.</noscript>
 <hr>
-<h2>Old Log Warehouse Search</h2>
+<h2>Search message logs</h2>
 <fieldset>
-<legend>Keyword specification</legend>
+<legend>Specify keywords</legend>
 			<input type="text" name="q" size="50" maxlength="255" value="" class="text" />
-			<input type="submit" value="  Submit  " class="btn" />
+			<input type="submit" value="Search" class="btn" />
 </fieldset>
 <br>
 <fieldset>
-<legend>Time specification</legend>
+<legend>Specify time range</legend>
 			<span class="medium">
 				<patTemplate:tmpl name="dateform" type="condition" conditionvar="OLDLOGSAVESW">
 				<patTemplate:sub condition="default">
@@ -68,7 +68,7 @@
 					<option value="21">21</option>
 					<option value="22">22</option>
 					<option value="23">23</option>
-				</select> Time
+				</select> hour
 				<select name="si" size="1">
 					<option value="00">00</option>
 					<option value="05">05</option>
@@ -82,7 +82,7 @@
 					<option value="45">45</option>
 					<option value="50">50</option>
 					<option value="55">55</option>
-				</select> i know.
+				</select> minutes
 				<select name="eh" size="1">
 					<option value="24">24</option>
 					<option value="00">00</option>
@@ -109,7 +109,7 @@
 					<option value="21">21</option>
 					<option value="22">22</option>
 					<option value="23">23</option>
-				</select> Time
+				</select> hour
 				<select name="ei" size="1">
 					<option value="00">00</option>
 					<option value="05">05</option>
@@ -123,9 +123,10 @@
 					<option value="45">45</option>
 					<option value="50">50</option>
 					<option value="55">55</option>
-				</select> Up to a minute</span>
+				</select> minutes</span>
 			</patTemplate:sub>
 			<patTemplate:sub condition="1">
+				From day
 			<select name="sd" size="1">
 				<option value="01">01</option>
 				<option value="02">02</option>
@@ -158,7 +159,7 @@
 				<option value="29">29</option>
 				<option value="30">30</option>
 				<option value="31">31</option>
-			</select> 日
+			</select> hour
 			<select name="sh" size="1">
 				<option value="00">00</option>
 				<option value="01">01</option>
@@ -184,7 +185,7 @@
 				<option value="21">21</option>
 				<option value="22">22</option>
 				<option value="23">23</option>
-			</select> 時 から
+			</select> to day
 			<select name="ed" size="1">
 				<option value="01">01</option>
 				<option value="02">02</option>
@@ -217,7 +218,7 @@
 				<option value="29">29</option>
 				<option value="30">30</option>
 				<option value="31" selected>31</option>
-			</select> 日
+			</select> hour
 			<select name="eh" size="1">
 				<option value="24">24</option>
 				<option value="00">00</option>
@@ -244,39 +245,39 @@
 				<option value="21">21</option>
 				<option value="22">22</option>
 				<option value="23">23</option>
-			</select> 時 まで</span>
+			</select></span>
 		</patTemplate:sub>
 	</patTemplate:tmpl>
 </fieldset>
 <fieldset>
-<legend>Regex</legend>
+<legend>Boolean operator</legend>
 <span class="medium">
 	<select name="b">
-		<option value="a">AND</option>
-		<option value="o">OR</option>
+		<option value="a">AND search</option>
+		<option value="o">OR search</option>
 	</select></span>
 </fieldset>
 <fieldset>
 <legend>Search target</legend>
 <span class="medium">
 	<select name="t">
-		<option value="a">Full text</option>
-		<option value="u">Author's name</option>
-		<option value="t">Title</option>
+		<option value="a">All text</option>
+		<option value="u">Usernames</option>
+		<option value="t">Titles</option>
 	</select></span>
 </fieldset>
 <br>
 <fieldset>
-<legend>その他</legend>
+<legend>Other</legend>
 <span class="medium">
-		<input type="checkbox" name="ci" value="checked" checked="checked" id="ci1" /><label for="ci1">Case matching</label><br>
+		<input type="checkbox" name="ci" value="checked" checked="checked" id="ci1" /><label for="ci1">Search both uppercase and lowercase</label><br>
 		<patTemplate:tmpl name="sicheck" visibility="hidden">
-		<input type="checkbox" name="sim" value="checked"{CHK_SI} id="sim1" /><label for="sim1">IMG ON</label><br>
+		<input type="checkbox" name="sim" value="checked"{CHK_SI} id="sim1" /><label for="sim1">Show images</label><br>
 	</patTemplate:tmpl>
 	<patTemplate:tmpl name="check_bt">
-	<input type="checkbox" name="bt" value="checked" checked="checked" id="bt1" /><label for="bt1">Using the quote function</label><br>
+	<input type="checkbox" name="bt" value="checked" checked="checked" id="bt1" /><label for="bt1">Show post buttons</label><br>
 </patTemplate:tmpl>
-<input type="checkbox" name="g" value="checked"{CHK_G} id="g1" /><label for="g1">gzip</label><br>
+<input type="checkbox" name="g" value="checked"{CHK_G} id="g1" /><label for="g1">Transfer using gzip compression</label><br>
 </span>
 </fieldset>
 </form>
@@ -290,24 +291,24 @@
 		}
 </script>
 <br>
-<a href="{DEFURL}">←BBS</a>
+<a href="{DEFURL}">←Bulletin board</a>
 <hr>
 </patTemplate:tmpl>
 
-<!-- 過去ログ検索結果 -->
+<!-- Message log search results -->
 <patTemplate:tmpl name="searchresult">
 <a id="top"></a>
-<table><tr><td><span class="pagetitle"><a href="{CGIURL}" style="text-decoration: none;">{BBSTITLE}</a></span> - Historical log search results　　<a href="{DEFURL}&m=g">←Back</a>　<a href="#bottom">▼</a> <span class="ngset"></span></td></tr></table>
+<table><tr><td><span class="pagetitle"><a href="{CGIURL}" style="text-decoration: none;">{BBSTITLE}</a></span> - Message log search results　　<a href="{DEFURL}&m=g">←Return</a>　<a href="#bottom">▼</a> <span class="ngset"></span></td></tr></table>
 <hr>
 </patTemplate:tmpl>
 
-<!-- 過去ログダウンロードHTML -->
+<!-- Message log download HTML -->
 <patTemplate:tmpl name="htmldownload">
-<table><tr><td><span class="pagetitle"><a href="{CGIURL}" style="text-decoration: none;">{BBSTITLE}</a></span> - Old Log Warehouse　　<a href="{DEFURL}&m=g">←Back</a>　<a href="#bottom">▼</a> <span class="ngset"></span></td></tr></table>
+<table><tr><td><span class="pagetitle"><a href="{CGIURL}" style="text-decoration: none;">{BBSTITLE}</a></span> - Message logs　　<a href="{DEFURL}&m=g">←Return</a>　<a href="#bottom">▼</a> <span class="ngset"></span></td></tr></table>
 <hr>
 </patTemplate:tmpl>
 
-<!-- 過去ログ各ファイル検索結果 -->
+<!-- Message log search results for each file -->
 <patTemplate:tmpl name="oldlog_upper" type="condition" conditionvar="success">
 <patTemplate:sub condition="default">
 <br>
@@ -316,7 +317,7 @@
 <hr>
 </patTemplate:sub>
 <patTemplate:sub condition="false">
-<span class="bbsmsg">{FILENAME} I cant open it!。</span>
+<span class="bbsmsg">Unable to open {FILENAME}.</span>
 </patTemplate:sub>
 </patTemplate:tmpl>
 <patTemplate:tmpl name="oldlog_lower">
@@ -324,13 +325,13 @@
 <hr>
 </patTemplate:tmpl>
 
-<!-- トピック一覧 -->
+<!-- Topic list -->
 <patTemplate:tmpl name="topiclist">
 <a id="top"></a>
 <table><tr><td><span class="pagetitle"><a href="{CGIURL}" style="text-decoration: none;">{BBSTITLE}</a></span> <a href="#bottom">▼</a></td></tr></table>
-<h1>List of topics [{FILENAME}]</h1>
+<h1>Topic list [{FILENAME}]</h1>
 <p class="ngset"></p>
-<div class="medium">Thread display - Tree display - Number - Last updated date and time-Contents</div>
+<div class="medium">Thread view - Tree view - Replies - Last updated - Contents</div>
 <hr>
 <pre>
 	<patTemplate:tmpl name="topic">
@@ -338,15 +339,15 @@
 </patTemplate:tmpl>
 </pre>
 <hr>
-<a href="{DEFURL}&m=g">Warehouse Search</a>　<a href="{DEFURL}">BBS</a><br>
+<a href="{DEFURL}&m=g">Message log search</a>　<a href="{DEFURL}">Bulletin board</a><br>
 </patTemplate:tmpl>
 
-<!-- Zipアーカイブ一覧 -->
+<!-- ZIP archive list -->
 <patTemplate:tmpl name="archivelist">
 <a id="top"></a>
-<header><span class="pagetitle"><a href="{CGIURL}" style="text-decoration: none;">{BBSTITLE}</a></span> <a href="{DEFURL}&m=g">←Warehouse Search</a>　<a href="{DEFURL}">BBS</a> <a href="#bottom">▼</a></header>
-<h1>Past Log ZIP Archive</h1>
-<span class="medium">Date, time, size</span>
+<header><span class="pagetitle"><a href="{CGIURL}" style="text-decoration: none;">{BBSTITLE}</a></span> <a href="{DEFURL}&m=g">←Message log search</a>　<a href="{DEFURL}">Bulletin board</a> <a href="#bottom">▼</a></header>
+<h1>Message log ZIP archives</h1>
+<span class="medium">Download - Date - Time - Size</span>
 <hr>
 <table border="0" cellpadding="3">
 	<patTemplate:tmpl name="archive" visibility="hidden">
@@ -358,5 +359,5 @@
 </patTemplate:tmpl>
 </table>
 <hr>
-<a href="{DEFURL}&m=g">←Warehouse Search</a>　<a href="{DEFURL}">bbs</a><br>
+<a href="{DEFURL}&m=g">←Message log search</a>　<a href="{DEFURL}">Bulletin board</a><br>
 </patTemplate:tmpl>

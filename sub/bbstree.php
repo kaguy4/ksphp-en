@@ -2,8 +2,8 @@
 
 /*
 
-くずはすくりぷとPHP ver0.0.7alpha (13:04 2003/02/18)
-ツリービューモジュール
+KuzuhaScriptPHP ver0.0.7alpha (13:04 2003/02/18)
+Tree view module
 
 * Todo
 
@@ -21,22 +21,22 @@ if(!defined("INCLUDED_FROM_BBS")) {
 
 
 /*
- * モジュール固有設定
+ * Module-specific settings
  *
- * $CONFに追加・上書きされます。
+ * They will be added to/overwritten by $CONF.
  */
 $GLOBALS['CONF_TREEVIEW'] = array(
 
-    # 枝の色
+    # Branch color
     'C_BRANCH' => '5ff',
 
-    # 更新時間表示の色
+    # Update time display color
     'C_UPDATE' => 'ccc',
 
-    # 更新時間表示の色
+    # New message color
     'C_NEWMSG' => 'fca',
 
-    # 表示ツリー数
+    # Number of trees displayed
     'TREEDISP' => 32,
 
 );
@@ -46,7 +46,7 @@ $GLOBALS['CONF_TREEVIEW'] = array(
 
 
 /**
- * ツリービューモジュール
+ * Tree view module
  *
  *
  *
@@ -56,7 +56,7 @@ $GLOBALS['CONF_TREEVIEW'] = array(
 class Treeview extends Bbs {
 
     /**
-     * コンストラクタ
+     * Constructor
      *
      */
     function __construct() {
@@ -67,47 +67,47 @@ class Treeview extends Bbs {
 
 
     /**
-     * メイン処理
+     * Main processing
      */
     function main() {
 
-        # 実行時間測定開始
+        # Start measuring execution time
         $this->setstarttime();
 
-        # フォーム取得前処理
+        # Form acquisiation preprocessing
         $this->procForm();
 
-        # 個人用設定反映
+        # Reflect personal settings
         if (@$this->f['treem'] == 'p') {
             $this->f['m'] = 'p';
         }
         $this->refcustom();
         $this->setusersession();
 
-        # gzip圧縮転送
+        # gzip compressed transfer
         if ($this->c['GZIPU']) {
             ob_start("ob_gzhandler");
         }
 
-        # 書き込み処理
+        # Post operation
         if (@$this->f['treem'] == 'p' and trim(@$this->f['v'])) {
 
-            # 環境変数取得
+            # Get environment variables
             $this->setuserenv();
 
-            # パラメータチェック
+            # Parameter check
             $posterr = $this->chkmessage();
 
-            # 書き込み処理
+            # Post operation
             if (!$posterr) {
                 $posterr = $this->putmessage($this->getformmessage());
             }
 
-            # ２重書き込みエラーなど
+            # Double post error, etc
             if ($posterr == 1) {
                 $this->prttreeview();
             }
-            # プロテクトコード時間経過のため再表示
+            # Protect code redisplaying due to time lapse
             else if ($posterr == 2) {
                 if (@$this->f['f']) {
                     $this->prtfollow(TRUE);
@@ -116,14 +116,14 @@ class Treeview extends Bbs {
                     $this->prttreeview(TRUE);
                 }
             }
-            # 管理モード移行
+            # Admin mode transition
             else if ($posterr == 3) {
                 define('BBS_ACTIVATED', TRUE);
                 require_once(PHP_BBSADMIN);
                 $bbsadmin = new Bbsadmin($this);
                 $bbsadmin->main();
             }
-            # 書き込み完了画面
+            # Post completion page
             else if (@$this->f['f']) {
                 $this->prtputcomplete();
             }
@@ -131,15 +131,15 @@ class Treeview extends Bbs {
                 $this->prttreeview();
             }
         }
-        # 環境設定画面表示
+        # User settings page display
         else if (@$this->f['setup']) {
             $this->prtcustom('tree');
         }
-        # スレッドのツリー表示
+        # Tree view of threads
         else if (@$this->f['s']) {
             $this->prtthreadtree();
         }
-        # ツリービューメイン画面
+        # Tree view main page
         else {
             $this->prttreeview();
         }
@@ -154,17 +154,17 @@ class Treeview extends Bbs {
 
 
     /**
-     * ツリービューを表示
+     * Displaying tree view
      *
-     * @todo  一部のログが削除・流れている場合の対策
+     * @todo  Measures for when some logs are deleted/removed
      */
     function prttreeview($retry = FALSE) {
 
-        # 表示メッセージ取得
+        # Get display message
         list ($logdata, $bindex, $eindex, $lastindex) = $this->getdispmessage();
 
         $isreadnew = FALSE;
-#20200210 擬古猫・未読ポインタfix
+#20200210 Gikoneko: unread pointer fix
 #        if ((@$this->f['readnew'] or ($this->s['MSGDISP'] == '0' and $bindex == 1)) and @$this->f['p'] > 0) {
         if ((@$this->f['readnew'] or ($this->s['MSGDISP'] == '0' )) and @$this->f['p'] > 0) {
             $isreadnew = TRUE;
@@ -172,11 +172,11 @@ class Treeview extends Bbs {
 
         $customstyle = $this->t->getParsedTemplate('tree_customstyle');
 
-        # HTMLヘッダ部分出力
+        # HTML header partial output
         $this->sethttpheader();
-        print $this->prthtmlhead ($this->c['BBSTITLE'] . ' ツリービュー', '', $customstyle);
+        print $this->prthtmlhead ($this->c['BBSTITLE'] . ' Tree view', '', $customstyle);
 
-        # フォーム部分
+        # Form section
         $dtitle = "";
         $dmsg = "";
         $dlink = "";
@@ -188,12 +188,12 @@ class Treeview extends Bbs {
         $forminput = '<input type="hidden" name="m" value="tree" /><input type="hidden" name="treem" value="p" />';
         $this->setform ($dtitle, $dmsg, $dlink, $forminput);
 
-        # メイン上部
+        # Upper main section
         $this->t->displayParsedTemplate('treeview_upper');
 
         $threadindex = 0;
 
-        # 最終書き込み時刻が最新のスレッド順に処理
+        # Process in order of threads with the latest post time
         while (count($logdata) > 0) {
 
             $msgcurrent = $this->getmessage(array_shift($logdata));
@@ -201,7 +201,7 @@ class Treeview extends Bbs {
                 $msgcurrent['THREAD'] = $msgcurrent['POSTID'];
             }
 
-            # スレッドを$logdataから抽出し、スレッドのメッセージ配列 $thread を作成
+            # Extract threads from $logdata and create message array $thread
             $thread = array($msgcurrent);
             $i = 0;
             while ($i < count($logdata)) {
@@ -210,7 +210,7 @@ class Treeview extends Bbs {
                     or $message['POSTID'] == $msgcurrent['THREAD']) {
                     array_splice($logdata, $i, 1);
                     $thread[] = $message;
-                    # 根の発見
+                    # Detect root
                     if ($message['POSTID'] == $message['THREAD'] or !$message['THREAD']) {
                         break;
                     }
@@ -220,7 +220,7 @@ class Treeview extends Bbs {
                 }
             }
 
-            # 未読リロード
+            # Unread reload
             if ($isreadnew) {
                 $hit = FALSE;
                 for ($i = 0; $i < count($thread); $i++) {
@@ -236,13 +236,13 @@ class Treeview extends Bbs {
             else if ($this->s['MSGDISP'] < 0) {
                 break;
             }
-            # 開始index
+            # Beginning index
             else if ($threadindex < $bindex - 1) {
                 $threadindex++;
                 continue;
             }
 
-            #「参考」からの参照ID抽出
+            # Extract reference IDs from "reference"
             foreach ($thread as $message) {
                 if (!@$message['REFID']) {
                     if (preg_match("/<a href=\"m=f&s=(\d+)[^>]+>([^<]+)<\/a>$/i", $tree, $matches)) {
@@ -254,7 +254,7 @@ class Treeview extends Bbs {
                 }
             }
 
-            # $thread のテキストツリーを出力
+            # Output $thread text tree
             $this->prttexttree($msgcurrent, $thread);
 
             $threadindex++;
@@ -266,23 +266,23 @@ class Treeview extends Bbs {
 
         $eindex = $threadindex;
 
-        # メッセージ情報
+        # Message information
         if ($this->s['MSGDISP'] < 0) {
             $msgmore = '';
         }
         else if ($eindex > 0) {
-            $msgmore = "以上は、現在登録されている最終更新順{$bindex}番目から{$eindex}番目までのスレッドです。";
+            $msgmore = "Shown above are threads {$bindex} through {$eindex}, displayed in order of most recently updated to least recently updated.";
         }
         else {
-            $msgmore = '未読メッセージはありません。';
+            $msgmore = 'There are no unread messages. ';
         }
         if (count($logdata) == 0) {
-            $msgmore .= 'これ以下のスレッドはありません。';
+            $msgmore .= 'There are no threads below this point.';
         }
         $this->t->addVar('treeview_lower', 'MSGMORE', $msgmore);
 
 
-        # ナビゲートボタン
+        # Navigation button
         if ($eindex > 0) {
             if ($eindex >= $lastindex) {
                 $this->t->setAttribute("nextpage", "visibility", "hidden");
@@ -295,12 +295,12 @@ class Treeview extends Bbs {
             }
         }
 
-        # 管理者投稿
+        # Administrator post
         if ($this->c['BBSMODE_ADMINONLY'] == 0) {
             $this->t->setAttribute("adminlogin", "visibility", "hidden");
         }
 
-        # メイン下部
+        # Lower main section
         $this->t->displayParsedTemplate('treeview_lower');
 
         print $this->prthtmlfoot ();
@@ -311,38 +311,38 @@ class Treeview extends Bbs {
 
 
     /**
-     * テキストツリー出力
+     * Text tree output
      *
-     * @param   Array   &$msgcurrent  親メッセージ
-     * @param   Array   &$thread      親子を含むメッセージの配列
+     * @param   Array   &$msgcurrent  Parent message
+     * @param   Array   &$thread      Array of messages containing parents and children
      */
     function prttexttree(&$msgcurrent, &$thread) {
 
         print "<pre class=\"msgtree\"><a href=\"{$this->s['DEFURL']}&amp;m=t&amp;s={$msgcurrent['THREAD']}\" target=\"link\">{$this->c['TXTTHREAD']}</a>";
         $msgcurrent['WDATE'] = Func::getdatestr($msgcurrent['NDATE']);
-        print "<span class=\"update\"> [更新日：{$msgcurrent['WDATE']}]</span>\r";
+        print "<span class=\"update\"> [Date updated: {$msgcurrent['WDATE']}]</span>\r";
         $tree =& $this->gentree(array_reverse($thread), $msgcurrent['THREAD']);
         $tree = str_replace("</span><span class=\"bc\">", "", $tree);
         $tree = str_replace("</span>　<span class=\"bc\">", "　", $tree);
         $tree = '　' . str_replace("\r", "\r　", $tree);
 
-        #20181110 擬古猫 特殊文字をエスケープする
+        #20181110 Gikoneko: Escape special characters
         $tree = str_replace("{","&#123;", $tree);
         $tree = str_replace("}","&#125;", $tree);
 
-    #20200207 擬古猫 span style=タグ有効
+    #20200207 Gikoneko: span style=tag enabled
 #    $tree = preg_replace("/&lt;span style=&quot;(.+?)&quot;&gt;(.+?)&lt;\/span&gt;/","<span style=\"$1\">$2</span>", $tree);
 
-    #20200207 擬古猫 font color="タグ有効
+    #20200207 Gikoneko: font color="tag enabled
 #    $tree = preg_replace("/&lt;font color=&quot;([a-zA-Z#0-9]+)&quot;&gt;(.+?)&lt;\/font&gt;/","<font color=\"$1\">$2</font>", $tree);
 
-    #20200201 擬古猫 font color=タグ有効
+    #20200201 Gikoneko: font color=tag enabled
 #    $tree = preg_replace("/&lt;font color=([a-zA-Z#0-9]+)&gt;(.+?)&lt;\/font&gt;/","<font color=$1>$2</font>", $tree);
 
-        #20181110 擬古猫 Unicode変換用
+        #20181110 Gikoneko: Unicode conversion
         #$tree  = preg_replace("/&amp;#(\d+);/","&#$1;", $tree );
 
-        #20181115 擬古猫 個別NG
+        #20181115 Gikoneko: Personal word filter
         #$tree  = preg_replace("/(.+)/","<span class= \"ngline\">$1</span>", $tree );
 
         print $tree . "</pre>\n\n<hr>\n\n";
@@ -353,58 +353,58 @@ class Treeview extends Bbs {
 
 
     /**
-     * テキストツリー生成の再帰処理関数
+     * Recursive function for text tree generation
      *
-     * @param   Array   &$treemsgs  親子を含むメッセージの配列
-     * @param   Integer $parentid   親ID
-     * @return  String  &$treeprint 親子のツリー文字列
+     * @param   Array   &$treemsgs  Array of messages containing parents and children
+     * @param   Integer $parentid   Parent ID
+     * @return  String  &$treeprint Parent-child tree string
      */
     function &gentree(&$treemsgs, $parentid) {
 
-        # ツリー文字列
+        # Tree string
         $treeprint = '';
 
-        # 親メッセージの出力
+        # Outputting parent message
         reset($treemsgs);
         while (list($pos, $treemsg) = each($treemsgs)) {
             if ($treemsg['POSTID'] == $parentid) {
 
-                # 参考の消去
-                $treemsg['MSG'] = preg_replace("/<a href=[^>]+>参考：[^<]+<\/a>/i", "", $treemsg['MSG'], 1);
+                # Delete reference
+                $treemsg['MSG'] = preg_replace("/<a href=[^>]+>Reference: [^<]+<\/a>/i", "", $treemsg['MSG'], 1);
 
-                # 引用の消去
+                # Delete quotes
                 $treemsg['MSG'] = preg_replace("/(^|\r)&gt;[^\r]*/", "", $treemsg['MSG']);
                 $treemsg['MSG'] = preg_replace("/^\r+/", "", $treemsg['MSG']);
                 $treemsg['MSG'] = rtrim($treemsg['MSG']);
 
-                #20181117 擬古猫 個別NG
+                #20181117 Gikoneko: Personal word filter
                 $treemsg['MSG']  = preg_replace("/(.+)/","<span class= \"ngline\">$1</span>\r", $treemsg['MSG']);
 
-                # フォロー画面へのリンク
+                # Link to the follow-up post page
                 $treeprint .= "<a href=\"{$this->s['DEFURL']}&amp;m=f&amp;s={$parentid}\" target=\"link\">{$this->c['TXTFOLLOW']}</a>";
 
-                # 投稿者名
+                # Username
                 if ($treemsg['USER'] and $treemsg['USER'] != $this->c['ANONY_NAME']) {
-                    $treeprint .= "投稿者：".preg_replace("/<[^>]*>/", '', $treemsg['USER'])."\r";
+                    $treeprint .= "User: ".preg_replace("/<[^>]*>/", '', $treemsg['USER'])."\r";
                 }
 
-                # 新着表示
+                # Display new arrivals
                 if (@$this->f['p'] > 0 and $treemsg['POSTID'] > $this->f['p']) {
                     $treemsg['MSG'] = '<span class="newmsg">' . $treemsg['MSG'] . '</span>';
                 }
 
-                # 画像BBSの画像を非表示
+                # Hide images on the imageBBS
                 $treemsg['MSG'] = Func::conv_imgtag($treemsg['MSG']);
 
                 $treeprint .= $treemsg['MSG'];
 
-                # 配列から消去
+                # Delete from array
                 array_splice($treemsgs, $pos, 1);
                 break;
             }
         }
 
-        # 子のIDを列挙
+        # Enumerate child IDs
         $childids = array();
         reset($treemsgs);
         while ($treemsg = each($treemsgs)) {
@@ -413,30 +413,30 @@ class Treeview extends Bbs {
             }
         }
 
-        # もし子があるなら、枝「│」をのばす
+        # If there's children, extend the "│" branch
         if ($childids) {
             $treeprint = str_replace("\r", "\r".'<span class="bc">│</span>', $treeprint);
         }
-        # なければ行頭空白
+        # If not, make the start of the line blank
         else {
             $treeprint = str_replace("\r", "\r".'　', $treeprint);
         }
 
-        # 子のツリー文字列を取得し、結合
+        # Get the tree strings of children and join them together
         $childidcount = count($childids) - 1;
         while ($childid = each($childids)) {
             $childtree =& $this->gentree($treemsgs, $childid[1]);
 
-            # もし次の子があるなら、枝「├」から「│」をのばす
+            # If there's another child, extend from "├" branch with a "│"
             if ($childid[0] < $childidcount) {
                 $childtree = '<span class="bc">├</span>' . str_replace("\r", "\r".'<span class="bc">│</span>', $childtree);
             }
-            # 最後の子なら枝「└」から行頭空白
+            # If it's the last child, make the start of the line blank and use "└" branch
             else {
                 $childtree = '<span class="bc">└</span>' . str_replace("\r", "\r".'　', $childtree);
             }
 
-            # 子のツリー文字列を親に結合
+            # Join child string to its parent
             $treeprint .= "\r" . $childtree;
         }
 
@@ -448,24 +448,24 @@ class Treeview extends Bbs {
 
 
     /**
-     * 表示範囲のメッセージとパラメータの取得
+     * Get display range messages and parameters
      *
      * @access  public
-     * @return  Array   $logdatadisp  ログ行配列
-     * @return  Integer $bindex       開始index
-     * @return  Integer $eindex       終端index
-     * @return  Integer $lastindex    全ログの終端index
-     * @return  Integer $msgdisp      表示件数
+     * @return  Array   $logdatadisp  Log line array
+     * @return  Integer $bindex       Beginning index
+     * @return  Integer $eindex       Ending index
+     * @return  Integer $lastindex    Last index for all logs
+     * @return  Integer $msgdisp      Display results
      */
     function getdispmessage() {
 
         $logdata = $this->loadmessage();
 
-        # 未読ポインタ（最新POSTID）
+        # Unread pointer (latest POSTID)
         $items = @explode (',', $logdata[0], 3);
         $toppostid = @$items[1];
 
-        # 表示件数
+        # Display results
         $msgdisp = Func::fixnumberstr(@$this->f['d']);
         if ($msgdisp === FALSE) {
             $msgdisp = $this->c['TREEDISP'];
@@ -480,17 +480,17 @@ class Treeview extends Bbs {
             $msgdisp = 0;
         }
 
-        # 開始index
+        # Beginning index
         $bindex = @$this->f['b'];
         if (!$bindex) {
             $bindex = 0;
         }
 
-        # 終端index
+        # Ending index
         $eindex = $bindex + $msgdisp;
 
-        # 未読リロード
-#20200210 擬古猫・未読ポインタfix
+        # Unread reload
+#20200210 Gikoneko: unread pointer fix
 #        if ((@$this->f['readnew'] or ($msgdisp == '0' and $bindex == 0)) and @$this->f['p'] > 0) {
         if ((@$this->f['readnew'] or ($msgdisp == '0' )) and @$this->f['p'] > 0) {
             $bindex = 0;
@@ -498,13 +498,13 @@ class Treeview extends Bbs {
       $eindex = $toppostid - $this->f['p'];
         }
 
-        # 最後のページの場合、切り詰め
+        # For the last page, truncate
         $lastindex = count($logdata);
         if ($eindex > $lastindex) {
             $eindex = $lastindex;
         }
 
-        # -1件表示
+        # Display -1 item
         if ($msgdisp < 0) {
             $bindex = 0;
             $eindex = 0;
@@ -513,7 +513,7 @@ class Treeview extends Bbs {
         $this->s['TOPPOSTID'] = $toppostid;
         $this->s['MSGDISP'] = $msgdisp;
 
-#20200210 擬古猫・未読ポインタfix
+#20200210 Gikoneko: unread pointer fix
     $this->t->addGlobalVars(array(
       'TOPPOSTID' => $this->s['TOPPOSTID'],
       'MSGDISP' => $this->s['MSGDISP']
@@ -526,13 +526,13 @@ class Treeview extends Bbs {
 
 
     /**
-     * 個別スレッドのツリー表示
+     * Tree view of individual threads
      *
      */
     function prtthreadtree() {
 
         if (!@$this->f['s']) {
-            $this->prterror ( 'パラメータがありません。' );
+            $this->prterror ( 'There are no parameters.' );
         }
 
         $customstyle = <<<__XHTML__
@@ -543,7 +543,7 @@ class Treeview extends Bbs {
 __XHTML__;
 
         $this->sethttpheader();
-        print $this->prthtmlhead ($this->c['BBSTITLE'] . ' ツリー表示', '', $customstyle);
+        print $this->prthtmlhead ($this->c['BBSTITLE'] . ' Tree view', '', $customstyle);
         print "<hr>\n";
 
         $result = $this->msgsearchlist('t');
@@ -556,7 +556,7 @@ __XHTML__;
         $this->prttexttree($msgcurrent, $result);
 
         print <<<__XHTML__
-<span class="bbsmsg"><a href="{$this->s['DEFURL']}">戻る</a></span>
+<span class="bbsmsg"><a href="{$this->s['DEFURL']}">Return</a></span>
 __XHTML__;
 
         print $this->prthtmlfoot ();

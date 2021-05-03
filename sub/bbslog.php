@@ -2,8 +2,8 @@
 
 /*
 
-くずはすくりぷとPHP ver0.0.7alpha (13:04 2003/02/18)
-過去ログ閲覧モジュール
+KuzuhaScriptPHP ver0.0.7alpha (13:04 2003/02/18)
+Message log viewer module
 
 * Todo
 
@@ -16,26 +16,26 @@ if(!defined("INCLUDED_FROM_BBS")) {
 
 
 /*
- * モジュール固有設定
+ * Module-specific settings
  *
- * $CONFに追加・上書きされます。
+ * They will be added to/overwritten by $CONF.
  */
 $GLOBALS['CONF_GETLOG'] = array(
 
-    # 複数ログの検索可能有無
+    # Whether or not multiple logs can be searched
     'MULTIPLESEARCH' => 1,
 
-    # 検索語ハイライト色
+    # Search term highlight color
     'C_QUERY' => 'FF8000',
 
-    # 検索キーワード数の最大値
+    # Maximum number of keywords that can be searched
     'MAXKEYWORDS' => 10,
 
 );
 
 
 /**
- * 過去ログ閲覧モジュール
+ * Message log viewer module
  *
  *
  *
@@ -46,7 +46,7 @@ class Getlog extends Webapp {
 
 
     /**
-     * コンストラクタ
+     * Constructor
      *
      */
     function __construct() {
@@ -57,48 +57,48 @@ class Getlog extends Webapp {
 
 
     /**
-     * メイン処理
+     * Main process
      */
     function main() {
 
-        # 実行時間測定開始
+        # Start measuring execution time
         $this->setstarttime();
 
-        # フォーム取得前処理
+        # Form acquisition preprocessing
         $this->procForm();
 
-        # 個人用設定反映
+        # Reflect personal settings
         $this->refcustom();
         $this->setusersession();
 
-        # gzip圧縮転送
+        # gzip compressed transfer
         if ($this->c['GZIPU']) {
             ob_start("ob_gzhandler");
         }
 
-        # 検索処理
+        # Search process
         if (@$this->f['f']) {
             $this->prtsearchresult();
         }
-        # ダウンロード
+        # Download
         else if (@$this->f['dl']) {
             $result = $this->prthtmldownload($this->f['dl']);
             if ($result) {
                 $this->prtloglist();
             }
         }
-        # トピック一覧
+        # Topic list
         else if (@$this->f['l']) {
             $result = $this->prttopiclist($this->f['l']);
             if ($result) {
                 $this->prtloglist();
             }
         }
-        # Zipアーカイブ
+        # ZIP archives
         else if (@$this->f['gm'] == 'z' and @$this->c['ZIPDIR']) {
             $this->prtarchivelist();
         }
-        # 検索画面
+        # Search page
         else {
             $this->prtloglist();
         }
@@ -113,7 +113,7 @@ class Getlog extends Webapp {
 
 
     /**
-     * 検索画面表示
+     * Display search page
      *
      */
     function prtloglist() {
@@ -131,7 +131,7 @@ class Getlog extends Webapp {
 
         $dh = opendir($dir);
         if (!$dh) {
-            $this->prterror ('ディレクトリが開けませんでした');
+            $this->prterror ('This directory could not be opened.');
         }
         while ($entry = readdir($dh)) {
             if (is_file($dir . $entry) and preg_match("/^\d+\.$oldlogext$/", $entry)) {
@@ -140,10 +140,10 @@ class Getlog extends Webapp {
         }
         closedir ($dh);
 
-        # ファイル名の自然順でソート
+        # Sort by natural file name order
         natsort($files);
 
-        # 更新時間が最新のファイルを標準でチェック
+        # Check for files with the latest update time as standard
         $maxftime = 0;
         foreach ($files as $filename) {
             $fstat = stat ($dir . $filename);
@@ -216,9 +216,9 @@ class Getlog extends Webapp {
         }
         if ($this->c['GZIPU']) $this->t->addVar('loglist', 'CHK_G', ' checked="checked"');
 
-        # 出力
+        # Output
         $this->sethttpheader();
-        print $this->prthtmlhead ($this->c['BBSTITLE'] . ' 過去ログ検索');
+        print $this->prthtmlhead ($this->c['BBSTITLE'] . ' Message log search');
         $this->t->displayParsedTemplate('loglist');
         print $this->prthtmlfoot ();
 
@@ -231,7 +231,7 @@ class Getlog extends Webapp {
 
 
     /**
-     * 検索条件の取得
+     * Get search conditions
      */
     function getconditions($filename) {
         $conditions = array();
@@ -255,7 +255,7 @@ class Getlog extends Webapp {
             $conditions['q'] = trim($conditions['q']);
             $conditions['keywords'] = preg_split("/\s+/", $conditions['q']);
             if (count($conditions['keywords']) > $this->c['MAXKEYWORDS']) {
-                $this->prterror ('検索キーワードが多すぎます。');
+                $this->prterror ('There are too many search keywords.');
             }
         }
 
@@ -271,7 +271,7 @@ class Getlog extends Webapp {
 
 
     /**
-     * 過去ログ検索結果表示
+     * Display message log search results
      *
      */
     function prtsearchresult() {
@@ -295,7 +295,7 @@ class Getlog extends Webapp {
 
         $this->sethttpheader();
         $customstyle= "  .sq { color: #{$this->c['C_QUERY']}; }\n";
-        print $this->prthtmlhead ($this->c['BBSTITLE'] . ' 過去ログ検索結果', '', $customstyle);
+        print $this->prthtmlhead ($this->c['BBSTITLE'] . ' Message log search results', '', $customstyle);
         $this->t->displayParsedTemplate('searchresult');
 
         foreach ($files as $filename) {
@@ -314,7 +314,7 @@ class Getlog extends Webapp {
 
 
     /**
-     * 過去ログHTMLファイルダウンロード
+     * Download message log HTML files
      *
      */
     function prthtmldownload($filename) {
@@ -326,7 +326,7 @@ class Getlog extends Webapp {
             $oldlogext = 'html';
         }
 
-        # 不正なファイル名
+        # Illegal file name
         if (!preg_match("/^\d+\.$oldlogext$/", $filename)) {
             return 1;
         }
@@ -341,7 +341,7 @@ class Getlog extends Webapp {
 
         if ($this->c['OLDLOGFMT']) {
             $this->sethttpheader();
-            print $this->prthtmlhead ($this->c['BBSTITLE'] . ' 過去ログ');
+            print $this->prthtmlhead ($this->c['BBSTITLE'] . ' Message log');
             $this->t->displayParsedTemplate('htmldownload');
         }
 
@@ -361,7 +361,7 @@ class Getlog extends Webapp {
 
 
     /**
-     * 各ファイル検索
+     * Search all files
      *
      */
     function prtoldlog($filename, $conditions = "", $isdownload = FALSE) {
@@ -375,7 +375,7 @@ class Getlog extends Webapp {
             $oldlogext = 'html';
         }
 
-        # 不正なファイル名
+        # Illegal file name
         if (!preg_match("/^\d+\.$oldlogext$/", $filename)) {
             return 1;
         }
@@ -400,12 +400,12 @@ class Getlog extends Webapp {
             if (!@$conditions['showall']) {
                 if (@$conditions['savesw']) {
                     if ($conditions['sd'] > 1 or $conditions['sh'] > 0 or $conditions['ed'] < 31 or $conditions['eh'] < 24) {
-                        $timerangestr .= "{$conditions['sd']}日{$conditions['sd']}時 ～ {$conditions['ed']}日{$conditions['ed']}時　";
+                        $timerangestr .= "Day {$conditions['sd']} Hour {$conditions['sd']} - Day {$conditions['ed']} Hour {$conditions['ed']}　";
                     }
                 }
                 else {
                     if ($conditions['sh'] > 0 or $conditions['si'] > 0 or $conditions['eh'] < 24 or $conditions['ei'] > 0) {
-                        $timerangestr .= "{$conditions['sh']}時{$conditions['si']}分 ～ {$conditions['eh']}時{$conditions['ei']}分　";
+                        $timerangestr .= "Hour {$conditions['sh']} Minute {$conditions['si']} - Hour {$conditions['eh']} Minute {$conditions['ei']}　";
                     }
                 }
             }
@@ -420,17 +420,17 @@ class Getlog extends Webapp {
         }
         $resultcount = 0;
 
-        # dat検索
+        # dat search
         if ($this->c['OLDLOGFMT']) {
             if (!@$conditions['showall']) {
                 $result = 0;
                 while (($logline = Func::fgetline($fh)) !== FALSE) {
                     $message = $this->getmessage($logline);
                     $result = $this->msgsearch($message, $conditions);
-                    # 検索ヒット
+                    # Search hit
                     if ($result == 1) {
                         $prtmessage = $this->prtmessage($message, $msgmode, $filename);
-                        # 検索語のハイライト
+                        # Highlight search keywords
                         if ($conditions['q']) {
                             $needle = "\Q{$conditions['q']}\E";
                             $quoteq = preg_quote($conditions['q'], "/");
@@ -452,13 +452,13 @@ class Getlog extends Webapp {
                         print $prtmessage;
                         $resultcount++;
                     }
-                    # 検索の終了
+                    # End of search
                     else if ($result == 2) {
                         break;
                     }
                 }
             }
-            # 全件表示
+            # Show all
             else {
                 while (($logline = Func::fgetline($fh)) !== FALSE) {
                     $messagestr = $this->prtmessage($this->getmessage($logline), $msgmode, $filename);
@@ -466,26 +466,26 @@ class Getlog extends Webapp {
                 }
             }
         }
-        # HTML検索
+        # HTML search
         else {
             if (!$conditions['showall']) {
-                # メッセージごとにファイル読み込みのバッファリングを行う
+                # Buffers file reads for each message
                 $buffer = "";
                 $flgbuffer = FALSE;
                 $result = 0;
                 while (($htmlline = Func::fgetline($fh)) !== FALSE) {
-                    # メッセージの開始
+                    # Start message
                     if (!$flgbuffer and preg_match("/<div [^>]*id=\"m\d+\"[^>]*>/", $htmlline)) {
                         $buffer = $htmlline;
                         $flgbuffer = TRUE;
                     }
-                    # メッセージの終了
+                    # End message
                     else if ($flgbuffer and strpos($htmlline, "<!--  -->") !== FALSE) {
                         $buffer .= $htmlline;
                         {
                             $result = $this->msgsearchhtml($buffer, $conditions);
                             if ($result == 1) {
-                                # 検索語のハイライト
+                                # Search keyword highlighting
                                 if ($conditions['q']) {
                                     $needle = "\Q{$conditions['q']}\E";
                                     $quoteq = preg_quote($conditions['q'], "/");
@@ -514,11 +514,11 @@ class Getlog extends Webapp {
                         $buffer = "";
                         $flgbuffer = FALSE;
                     }
-                    # メッセージ中
+                    # Middle of message
                     else if ($flgbuffer) {
                         $buffer .= $htmlline;
                     }
-                    # メッセージ以外
+                    # Other than message
                     else {
                     }
                 }
@@ -542,13 +542,13 @@ class Getlog extends Webapp {
                     #$value_euc = htmlentities($value_euc, ENT_QUOTES, 'EUC-JP');
                     #$value = JcodeConvert($value_euc, 1, 2);
                     $value = htmlentities($value, ENT_QUOTES);
-                    $resultmsg .= '「' . $value . '」は';
+                    $resultmsg .= 'For "' . $value . '" there were ';
                 }
                 if ($resultcount > 0) {
-                    $resultmsg .= $resultcount . '件見つかりました。';
+                    $resultmsg .= $resultcount . ' results found.';
                 }
                 else {
-                    $resultmsg .= '見つかりませんでした。';
+                    $resultmsg .= 'no results found.';
                 }
                 #print $resultmsg;
                 $this->t->addVar('oldlog_lower', 'RESULTMSG', $resultmsg);
@@ -570,7 +570,7 @@ class Getlog extends Webapp {
 
 
     /**
-     * １件メッセージ検索（HTML形式）
+     * Single message search (HTML format)
      */
     function msgsearchhtml ($buffer, $conditions) {
         $message = array();
@@ -604,8 +604,8 @@ class Getlog extends Webapp {
 
 
     /**
-     * １件メッセージ検索（dat形式）
-     * 返り値 0:ヒットなし 1:ヒット 2:検索終了信号
+     * Single message search (dat format)
+     * Return values - 0: No hit, 1: Hit, 2: Signal end of search
      */
     function msgsearch ($message, $conditions) {
 
@@ -613,7 +613,7 @@ class Getlog extends Webapp {
             return 0;
         }
 
-        # 月毎
+        # Monthly
         if (@$conditions['savesw']) {
             $starttime = $conditions['sd'].$conditions['sh'];
             $endtime = $conditions['ed'].$conditions['eh'];
@@ -621,7 +621,7 @@ class Getlog extends Webapp {
                 $message['NDATESTR'] = date("dH", $message['NDATE']);
             }
         }
-        # 日毎
+        # Daily
         else {
             $starttime = $conditions['sh'].$conditions['si'];
             $endtime = $conditions['eh'].$conditions['ei'];
@@ -635,7 +635,7 @@ class Getlog extends Webapp {
 
         $hit = FALSE;
 
-        # キーワード検索
+        # Keyword search
         if (@$conditions['keywords']) {
 
             $haystack = '';
@@ -649,7 +649,7 @@ class Getlog extends Webapp {
                 $haystack = "{$message['USER']}<>{$message['TITLE']}<>{$message['MSG']}";
             }
 
-            # OR検索
+            # OR search
             if ($conditions['b'] == 'o') {
                 $hit = FALSE;
                 foreach ($conditions['keywords'] as $needle) {
@@ -665,7 +665,7 @@ class Getlog extends Webapp {
                     }
                 }
             }
-            # AND検索
+            # AND search
             else {
                 $hit = TRUE;
                 foreach ($conditions['keywords'] as $needle) {
@@ -699,11 +699,11 @@ class Getlog extends Webapp {
 
 
     /**
-     * トピック一覧の表示
+     * Display topic list
      */
     function prttopiclist($filename) {
 
-        # 不正なファイル名
+        # Illegal file name
         if (!preg_match("/^\d+\.dat$/", $filename)) {
             return 1;
         }
@@ -713,7 +713,7 @@ class Getlog extends Webapp {
 
         $fh = @fopen($this->c['OLDLOGFILEDIR'] . $filename, "rb");
         if (!$fh) {
-            $this->prterror($filename . ' を開けませんでした。');
+            $this->prterror($filename . ' was unable to be opened.');
         }
         flock ($fh, 1);
 
@@ -729,7 +729,7 @@ class Getlog extends Webapp {
                 $tcount[$message['POSTID']] = 0;
 
                 $msg = ltrim($message['MSG']);
-                $msg = preg_replace("/<a href=[^>]+>参考：[^<]+<\/a>/i", "", $msg, 1);
+                $msg = preg_replace("/<a href=[^>]+>Reference: [^<]+<\/a>/i", "", $msg, 1);
                 $msg = preg_replace("/<[^>]+>/", "", $msg);
                 $msgsplit = explode("\r", $msg);
                 $msgdigest = $msgsplit[0];
@@ -777,7 +777,7 @@ class Getlog extends Webapp {
         }
 
         $this->sethttpheader();
-        print $this->prthtmlhead ($this->c['BBSTITLE'] . ' トピック一覧 ' . $filename);
+        print $this->prthtmlhead ($this->c['BBSTITLE'] . ' Topic list ' . $filename);
         $this->t->displayParsedTemplate('topiclist');
         print $this->prthtmlfoot ();
 
@@ -788,7 +788,7 @@ class Getlog extends Webapp {
 
 
     /**
-     * Zipアーカイブ一覧画面表示
+     * Display ZIP archive list page
      *
      */
     function prtarchivelist() {
@@ -797,7 +797,7 @@ class Getlog extends Webapp {
 
         $dh = opendir($dir);
         if (!$dh) {
-            $this->prterror ('ディレクトリが開けませんでした');
+            $this->prterror ('This directory could not be opened.');
         }
         $files = array();
         while ($entry = readdir($dh)) {
@@ -807,7 +807,7 @@ class Getlog extends Webapp {
         }
         closedir ($dh);
 
-        # ファイル名の自然順でソート
+        # Sort by natural file name order
         natsort($files);
 
         foreach ($files as $filename) {
@@ -826,7 +826,7 @@ class Getlog extends Webapp {
         }
 
         $this->sethttpheader();
-        print $this->prthtmlhead ($this->c['BBSTITLE'] . ' 過去ログアーカイブ');
+        print $this->prthtmlhead ($this->c['BBSTITLE'] . ' Message log archive');
         $this->t->displayParsedTemplate('archivelist');
         print $this->prthtmlfoot ();
 
@@ -836,7 +836,7 @@ class Getlog extends Webapp {
 
 
     /**
-     * ダウンロード機能使用可否チェック
+     * Check download function availability
      */
     function dlchk() {
 
