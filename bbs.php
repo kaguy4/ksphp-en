@@ -2070,20 +2070,29 @@ class Bbs extends Webapp {
  * @package strangeworld.cnscript
  * @access  public
  */
+function getUserIpAddr(){
+    if(!empty($_SERVER['HTTP_CLIENT_IP'])){
+        $ip = $_SERVER['HTTP_CLIENT_IP'];
+    }elseif(!empty($_SERVER['HTTP_X_FORWARDED_FOR'])){
+        $ip = $_SERVER['HTTP_X_FORWARDED_FOR'];
+    }else{
+        $ip = $_SERVER['REMOTE_ADDR'];
+    }
+    return $ip;
+}
+
 class Func {
 
     /**
-     * コンストラクタ
+     * Constructor
      *
      */
     public function __construct() {
     }
 
-
     public static function getuserenv() {
-
-        $addr = $_SERVER['REMOTE_ADDR'];
-        $host = $_SERVER['REMOTE_HOST'];
+        $addr = getUserIpAddr();
+        $host = getUserIpAddr();
         $agent = $_SERVER['HTTP_USER_AGENT'];
         if ($addr == $host or !$host) {
             $host = gethostbyaddr ($addr);
